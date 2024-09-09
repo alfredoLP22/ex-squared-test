@@ -15,3 +15,16 @@ export const getAllMakes = async (req: Request, res: Response) => {
       .send({ message: "Error processing request", error: error.message });
   }
 };
+
+export const getById = async (req: Request, res: Response) => {
+  try {
+    const xmlData = await XmlParserService.fetchVehicleTypes(req.params.id);
+    console.log(xmlData);
+    const jsonData = await DataTransformer.transformXmlToJsonType(xmlData);
+    res.json(jsonData);
+  } catch (error: any) {
+    res
+      .status(500)
+      .send({ message: "Error processing request", error: error.message });
+  }
+};

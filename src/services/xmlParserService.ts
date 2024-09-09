@@ -13,23 +13,29 @@ export class XmlParserService {
         return cachedData;
       }
       const response = await axios.get(
-        "https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=XML"
+        `${process.env.VEHICLE_API_BASE_URL}/getallmakes?format=XML`
       );
 
       await redisClient.setEx(cacheKey, 3600, response.data);
 
       return response.data;
-    } catch (error) {
-      throw new Error("Error fetching makes");
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
 
-  static async fetchVehicleTypes(makeId: number): Promise<any> {
+  static async fetchVehicleTypes(makeId: string): Promise<any> {
+    const cacheKey = `vehicleTypes_${makeId}`;
     try {
+      const cachedData = await redisClient.get(cacheKey);
+
+      if (cachedData) {
+        return JSON.parse(cachedData);
+      }
       const response = await axios.get(
-        `https://vpic.nhtsa.dot.gov/api/vehicles/GetVehicleTypesForMakeId/${makeId}?format=xml`
+        `${process.env.VEHICLE_API_BASE_URL}/GetVehicleTypesForMakeId/${makeId}?format=xml`
       );
-      return parseStringPromise(response.data);
+      return response.data;
     } catch (error) {
       throw new Error("Error fetching vehicle types");
     }

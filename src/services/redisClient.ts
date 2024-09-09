@@ -1,11 +1,15 @@
-import { createClient } from 'redis';
+import { createClient } from "redis";
 
 const redisClient = createClient({
-  url: 'redis://localhost:6379',
+  url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
 });
 
-redisClient.on('error', (err) => {
-  console.error('Redis error:', err);
+redisClient.on("error", (err) => {
+  console.error("Redis error:", err);
+});
+
+redisClient.connect().catch((err) => {
+  console.error("Redis connection error:", err);
 });
 
 export default redisClient;
