@@ -28,8 +28,8 @@ This project is a Node.js application built with Express that interacts with ext
 1. **Clone the repository:**
 
    ```bash
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone https://github.com/alfredoLP22/ex-squared-test
+   cd ex-squared-test
 
    ```
 
